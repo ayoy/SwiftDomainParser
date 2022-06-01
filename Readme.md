@@ -25,7 +25,8 @@ Examples:
 #### Initialization: 
 ```
 import DomainParser
-let domainParse = try DomainParser()
+let pslFileURL = ... // point to bundled public_suffix_list.dat file
+let domainParser = try DomainParser(pslFileURL: pslFileURL)
 ```
 
 You should use the same instance when you parse multiple URLs.

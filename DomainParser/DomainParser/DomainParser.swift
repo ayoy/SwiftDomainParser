@@ -24,9 +24,8 @@ public struct DomainParser {
     /// Parse the `public_suffix_list` file and build the set of Rules
     /// Parameters:
     ///   - QuickParsing: IF true, the `exception` and `wildcard` rules will be ignored
-    public init(quickParsing: Bool = false) throws {
-        let url = Bundle.current.url(forResource: "public_suffix_list", withExtension: "dat")!
-        let data = try Data(contentsOf: url)
+    public init(pslFileURL: URL, quickParsing: Bool = false) throws {
+        let data = try Data(contentsOf: pslFileURL)
         parsedRules = try RulesParser().parse(raw: data)
         basicRulesParser = BasicRulesParser(suffixes: parsedRules.basicRules)
         onlyBasicRules = quickParsing
@@ -45,18 +44,6 @@ public struct DomainParser {
         let isMatching: (Rule) -> Bool =  { $0.isMatching(hostLabels: hostComponents) }
         let rule = parsedRules.exceptions.first(where: isMatching) ?? parsedRules.wildcardRules.first(where: isMatching)
         return rule?.parse(hostLabels: hostComponents)
-    }
-}
-
-private extension Bundle {
-
-    static var current: Bundle {
-        #if SWIFT_PACKAGE
-        return Bundle.module
-        #else
-        class ClassInCurrentBundle {}
-        return Bundle.init(for: ClassInCurrentBundle.self)
-        #endif
     }
 }
 

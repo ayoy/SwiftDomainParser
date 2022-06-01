@@ -19,14 +19,14 @@ let package = Package(
                 name: "DomainParser",
                 dependencies: [],
                 path: "DomainParser/DomainParser",
-                exclude: ["Info.plist"],
-                resources: [.process("Resources")]
+                exclude: ["Info.plist"]
             ),
             .testTarget(
                 name: "DomainParserTests",
                 dependencies: ["DomainParser"],
                 path: "DomainParser/DomainParserTests",
-                exclude: ["Info.plist"]
+                exclude: ["Info.plist"],
+                resources: [.copy("public_suffix_list.dat")]
             )
         ]
     )

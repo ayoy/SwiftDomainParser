@@ -14,12 +14,12 @@ class DomainParserTests: XCTestCase {
     var domainParser: DomainParser!
     override func setUp() {
         super.setUp()
-        domainParser = try! DomainParser()
+        domainParser = try! DomainParser(pslFileURL: .bundledTestPSL)
     }
 
     func testMeasureSetupTime() {
         self.measure {
-            _ = try! DomainParser()
+            _ = try! DomainParser(pslFileURL: .bundledTestPSL)
         }
     }
     
@@ -132,3 +132,21 @@ class DomainParserTests: XCTestCase {
     }
 }
 
+private extension Bundle {
+
+    static var current: Bundle {
+        #if SWIFT_PACKAGE
+        return Bundle.module
+        #else
+        class ClassInCurrentBundle {}
+        return Bundle.init(for: ClassInCurrentBundle.self)
+        #endif
+    }
+}
+
+private extension URL {
+
+    static let bundledTestPSL: URL {
+        Bundle.current.url(forResource: "public_suffix_list", withExtension: "dat")!
+    }
+}
